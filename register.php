@@ -1,6 +1,7 @@
-<?php include 'db.php'; ?>
-
 <?php
+include 'db.php';
+session_start();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login = $_POST['login'];
     $haslo = password_hash($_POST['haslo'], PASSWORD_DEFAULT);
@@ -10,14 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         header("Location: login.php");
+        exit(); // ← konieczne po header()
     } else {
-        echo "Błąd: " . $stmt->error;
+        $blad = "Błąd rejestracji: " . $stmt->error;
     }
 
     $stmt->close();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -27,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="container mt-5">
 <h2>Rejestracja</h2>
+<?php if (isset($blad)) echo "<div class='alert alert-danger'>$blad</div>"; ?>
 <form method="POST">
     <div class="mb-3">
         <label for="login" class="form-label">Login</label>
@@ -38,5 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <button type="submit" class="btn btn-primary">Zarejestruj</button>
 </form>
+<p class="mt-3">
+    Masz już konto?
+    <a href="login.php" class="btn btn-primary">Zaloguj się</a>
+</p>
+
 </body>
 </html>
