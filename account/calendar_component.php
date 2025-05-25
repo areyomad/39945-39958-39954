@@ -1,0 +1,1 @@
+<!-- Placeholder - component logic included in calorie_calculator.php -->
